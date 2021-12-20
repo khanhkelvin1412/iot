@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: webchat_backend
+  profiles:
+    active: dev
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+  messages:
+    basename: i18n/messages
+    main:
+      allow-bean-definition-overriding: true
+    mvc:
+      favicon:
+        enabled: false
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+  liquibase:
+    change-log: classpath:/db/changelog-master.xml
+    enabled: false
