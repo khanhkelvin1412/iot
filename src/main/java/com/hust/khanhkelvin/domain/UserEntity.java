@@ -71,14 +71,12 @@ public class UserEntity extends AbstractAuditingEntity implements Serializable {
     private String description;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @BatchSize(size = 20)
-    private Set<AuthorityEntity> authorities = new HashSet<>();
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name")})
+    private Set<AuthorityEntity> authorities;
 
     @JsonIgnore
     @ManyToMany

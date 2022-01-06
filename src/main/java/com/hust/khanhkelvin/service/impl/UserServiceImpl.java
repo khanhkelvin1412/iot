@@ -1,15 +1,22 @@
 package com.hust.khanhkelvin.service.impl;
 
 import com.hust.khanhkelvin.config.AuthenticationProperties;
+import com.hust.khanhkelvin.domain.AuthorityEntity;
 import com.hust.khanhkelvin.domain.UserEntity;
+import com.hust.khanhkelvin.dto.Authority;
 import com.hust.khanhkelvin.dto.User;
 import com.hust.khanhkelvin.dto.request.UserLoginRequest;
 import com.hust.khanhkelvin.dto.request.UserRegisterRequest;
 import com.hust.khanhkelvin.dto.response.AuthToken;
+import com.hust.khanhkelvin.dto.response.UserInfo;
+import com.hust.khanhkelvin.repository.AuthorityRepository;
 import com.hust.khanhkelvin.repository.UserRepository;
+import com.hust.khanhkelvin.security.AuthoritiesConstants;
+import com.hust.khanhkelvin.security.SecurityUtils;
 import com.hust.khanhkelvin.security.jwt.TokenProvider;
 import com.hust.khanhkelvin.service.MailService;
 import com.hust.khanhkelvin.service.UserService;
+import com.hust.khanhkelvin.service.mapper.UserInfoMapper;
 import com.hust.khanhkelvin.service.mapper.UserMapper;
 import com.hust.khanhkelvin.utils.Constants;
 import com.hust.khanhkelvin.utils.RandomUtil;
@@ -22,7 +29,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,7 +50,11 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationProperties authenticationProperties;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, MailService mailService, AuthenticationManager authenticationManager, TokenProvider tokenProvider, AuthenticationProperties authenticationProperties) {
+    private final UserInfoMapper userInfoMapper;
+
+    private final AuthorityRepository authorityRepository;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, MailService mailService, AuthenticationManager authenticationManager, TokenProvider tokenProvider, AuthenticationProperties authenticationProperties, UserInfoMapper userInfoMapper, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
@@ -49,6 +62,8 @@ public class UserServiceImpl implements UserService {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.authenticationProperties = authenticationProperties;
+        this.userInfoMapper = userInfoMapper;
+        this.authorityRepository = authorityRepository;
     }
 
     @Override
@@ -89,6 +104,20 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public UserInfo getCurrentUser() {
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (!currentUserLogin.isPresent()) {
+            return null;
+        }
+        String currentUser = currentUserLogin.get();
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(currentUser);
+        if (userEntityOptional.isPresent()) {
+            return userInfoMapper.toDto(userEntityOptional.get());
+        }
+        return null;
+    }
+
     /**
      * Thực hiện việc gửi mail bất đồng bộ, không sử dụng chung ở trong hàm có truy cập xuống db
      *
@@ -113,6 +142,9 @@ public class UserServiceImpl implements UserService {
         userEntity.setEmail(email);
         userEntity.setActivated(true);
         userEntity.setStatus(Constants.ENTITY_STATUS.ACTIVE);
+        Set<AuthorityEntity> authorities = new HashSet<>();
+        authorityRepository.findByName(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        userEntity.setAuthorities(authorities);
         userEntity.setActivationKey(RandomUtil.generateActivationKey());
 
         // set password with salt

@@ -4,6 +4,7 @@ import com.hust.khanhkelvin.dto.User;
 import com.hust.khanhkelvin.dto.request.UserLoginRequest;
 import com.hust.khanhkelvin.dto.request.UserRegisterRequest;
 import com.hust.khanhkelvin.dto.response.AuthToken;
+import com.hust.khanhkelvin.dto.response.UserInfo;
 
 public interface UserService {
 
@@ -30,4 +31,11 @@ public interface UserService {
      * @return
      */
     AuthToken authenticate(UserLoginRequest request);
+
+    /**
+     * get information of current user login
+     *
+     * @return
+     */
+    UserInfo getCurrentUser();
 }

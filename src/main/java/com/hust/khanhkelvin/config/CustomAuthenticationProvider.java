@@ -2,6 +2,7 @@ package com.hust.khanhkelvin.config;
 
 import com.hust.khanhkelvin.domain.UserEntity;
 import com.hust.khanhkelvin.repository.UserRepository;
+import com.hust.khanhkelvin.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -55,6 +56,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                     .stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                     .collect(Collectors.toList());
+            if (authorities.isEmpty()) {
+                authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+            }
 
             return new UsernamePasswordAuthenticationToken(lowercaseLogin, null, authorities);
         }
