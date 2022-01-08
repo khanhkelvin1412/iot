@@ -1,8 +1,7 @@
 package com.hust.khanhkelvin.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.hust.khanhkelvin.utils.SensorType;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
@@ -15,26 +14,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "house")
+@Table(name = "sensor")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Data
 @ToString
-public class HouseEntity extends AbstractAuditingEntity implements Serializable {
+public class SensorEntity extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "code", length = 20)
-    private String code;
-
-    @Column(name = "status")
-    private Integer status;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private SensorType type;
 }
