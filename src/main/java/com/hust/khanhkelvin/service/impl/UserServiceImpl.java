@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Thực hiện việc gửi mail bất đồng bộ, không sử dụng chung ở trong hàm có truy cập xuống db
+     * Thực hiện việc gửi mail bất đồng bộ, không sử dụng chung ở trong hàm có truy cập xuống db.sql
      *
      * @param user
      */

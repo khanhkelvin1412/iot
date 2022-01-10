@@ -1,9 +1,16 @@
 package com.hust.khanhkelvin.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hust.khanhkelvin.web.util.Constants;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -79,11 +86,7 @@ public class UserEntity extends AbstractAuditingEntity implements Serializable {
     private Set<AuthorityEntity> authorities;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "user_house",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "house_id", referencedColumnName = "name")})
+    @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<HouseEntity> houses = new HashSet<>();

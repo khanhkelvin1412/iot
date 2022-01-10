@@ -36,3 +36,5 @@ build/
 logs
 
 !**/src/main/**/build/
+
+mysql-data

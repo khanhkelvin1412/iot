@@ -1,5 +1,18 @@
 # iot
 
+Nếu sử dụng docker
+
+```
+docker-compose up -d
+
+mysql -u root -p
+
+create user 'hust'@'172.31.0.1' identified by '1qazXSW@';
+
+grant all privileges ON smart_house.* to 'hust'@'172.31.0.1';
+
+```
+
 Hướng dẫn tạo Schema: 
 
 ```

@@ -8,10 +8,13 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class RandomUtil {
     private static final int DEF_COUNT = 20;
     private static final int SALT_COUNT = 10;
+    private static final int HOUSE_COUNT = 10;
 
     private final static String ID_DATETIME_PATTERN = "yyyyMMddSSSHHssmm";
 
     private static final AtomicLong LAST_TIME_MS = new AtomicLong();
+
+    private static final Random random = new Random();
 
     private RandomUtil() {
     }
@@ -29,7 +32,10 @@ public final class RandomUtil {
     }
 
     public static int generateRandom(int size) {
-        Random rand = new Random();
-        return rand.nextInt(size);
+        return random.nextInt(size);
+    }
+
+    public static String genCodeHouse(){
+        return RandomStringUtils.randomNumeric(HOUSE_COUNT);
     }
 }
