@@ -17,6 +17,6 @@ public interface HouseSensorRepository extends JpaRepository<HouseSensorEntity, 
     @Query("from HouseSensorEntity h where h.houseId = :id")
     Optional<Set<HouseSensorEntity>> findHouseSensorByHouseID(@Param("id") Long houseId);
 
-    @Query("from HouseSensorEntity h where h.houseId = :id")
+    @Query("from HouseSensorEntity h where h.houseId = :houseId")
     List<HouseSensorEntity> findByHouseId(Long houseId);
 }
