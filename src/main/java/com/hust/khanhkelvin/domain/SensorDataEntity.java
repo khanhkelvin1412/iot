@@ -1,5 +1,6 @@
 package com.hust.khanhkelvin.domain;
 
+import com.hust.khanhkelvin.utils.SensorType;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
@@ -20,12 +21,18 @@ public class SensorDataEntity extends AbstractAuditingEntity implements Serializ
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "data")
-    private String data;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sensor_type")
+    private SensorType sensorType;
 
-    private Long houseId;
+    private boolean status;
 
-    private Long sensorId;
+    private Integer temp;
+
+    private Integer hum;
+
+    @Column(name = "gas_concentration")
+    private Double gasConcentration;
 
     @Column(name = "house_sensor_id")
     private Long houseSensorId;
