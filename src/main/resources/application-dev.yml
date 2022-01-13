@@ -48,6 +48,11 @@ spring:
     use-code-as-default-message: true
     cache-duration: 60 # 1 second, see the ISO 8601 standard
     basename: i18n/messages
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 server:
   port: 8081
 
@@ -69,3 +74,7 @@ security:
 
 application:
   domain: http://localhost:8081
+
+rabbitmq:
+  queue-hust-iot-action: queue.hust.iot.action
+  queue-hust-iot-stream: queue.hust.iot.stream

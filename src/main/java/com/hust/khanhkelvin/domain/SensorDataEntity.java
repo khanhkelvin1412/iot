@@ -26,4 +26,8 @@ public class SensorDataEntity extends AbstractAuditingEntity implements Serializ
     private Long houseId;
 
     private Long sensorId;
+
+    @Column(name = "house_sensor_id")
+    private Long houseSensorId;
+
 }

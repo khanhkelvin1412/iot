@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
         String accessToken = tokenProvider.createToken(authentication, false);
         return AuthToken.builder()
                 .accessToken(accessToken)
+                .username(authentication.getName())
                 .tokenType(AuthToken.TOKEN_TYPE_BEARER)
                 .expiresIn(authenticationProperties.getTokenValidityInSeconds())
                 .build();
