@@ -12,4 +12,6 @@ public class SensorDetail {
     private String name;
 
     private SensorType type;
+
+    private boolean isMulti;
 }

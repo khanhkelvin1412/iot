@@ -27,4 +27,7 @@ public class SensorEntity extends AbstractAuditingEntity implements Serializable
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private SensorType type;
+
+    @Column(name = "is_multi")
+    private boolean isMulti;
 }

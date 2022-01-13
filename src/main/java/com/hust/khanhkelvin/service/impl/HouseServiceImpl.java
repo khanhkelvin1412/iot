@@ -17,14 +17,13 @@ import com.hust.khanhkelvin.service.HouseSensorService;
 import com.hust.khanhkelvin.service.HouseService;
 import com.hust.khanhkelvin.service.mapper.HouseInfoDetailMapper;
 import com.hust.khanhkelvin.service.mapper.HouseInfoMapper;
-import com.hust.khanhkelvin.service.mapper.SensorMapper;
+import com.hust.khanhkelvin.service.mapper.SensorDetailMapper;
 import com.hust.khanhkelvin.utils.RandomUtil;
 import com.hust.khanhkelvin.web.error.BadRequestAlertException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -39,7 +38,7 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseInfoDetailMapper houseInfoDetailMapper;
 
-    private final SensorMapper sensorMapper;
+    private final SensorDetailMapper sensorDetailMapper;
 
     private final HouseSensorRepository houseSensorRepository;
 
@@ -51,7 +50,7 @@ public class HouseServiceImpl implements HouseService {
             HouseRepository houseRepository,
             HouseSensorService houseSensorService,
             HouseInfoDetailMapper houseInfoDetailMapper,
-            SensorMapper sensorMapper,
+            SensorDetailMapper sensorDetailMapper,
             HouseSensorRepository houseSensorRepository,
             SensorRepository sensorRepository
         ) {
@@ -61,7 +60,7 @@ public class HouseServiceImpl implements HouseService {
         this.houseInfoMapper = houseInfoMapper;
         this.houseSensorService = houseSensorService;
         this.houseInfoDetailMapper = houseInfoDetailMapper;
-        this.sensorMapper = sensorMapper;
+        this.sensorDetailMapper = sensorDetailMapper;
         this.houseSensorRepository = houseSensorRepository;
         this.sensorRepository = sensorRepository;
     }
@@ -91,7 +90,7 @@ public class HouseServiceImpl implements HouseService {
             List<SensorDetail> sensorDetails = new ArrayList<>();
             for(HouseSensorEntity houseSensorEntity : houseSensorEntities){
                 SensorEntity sensorEntity = sensorEntityMap.get(houseSensorEntity.getSensorId());
-                SensorDetail sensorDetail = sensorMapper.toDto(sensorEntity);
+                SensorDetail sensorDetail = sensorDetailMapper.toDto(sensorEntity);
                 sensorDetail.setIdx(houseSensorEntity.getId());
                 sensorDetails.add(sensorDetail);
             }

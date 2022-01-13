@@ -5,5 +5,5 @@ import com.hust.khanhkelvin.dto.response.sensor.SensorDetail;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface SensorMapper extends EntityMapper<SensorDetail, SensorEntity>{
+public interface SensorDetailMapper extends EntityMapper<SensorDetail, SensorEntity>{
 }
