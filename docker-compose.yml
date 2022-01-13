@@ -11,3 +11,9 @@ services:
       - ./mysql-data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
