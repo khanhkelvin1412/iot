@@ -90,4 +90,25 @@ public class SensorDataServiceImpl implements SensorDataService {
         response.put(SensorType.GAS_CONCENTRATION.name(), sensorDataMapper.toDto(dataGasConcentration));
         return response;
     }
+
+    @Override
+    public HashMap<String, List<SensorData>> getAllValueOfLeds(Long houseId) {
+        UserInfo user = userService.getCurrentUser();
+        List<Long> houseSensorIds = houseSensorRepository.findByHouseId(houseId)
+                .stream().map(HouseSensorEntity::getId)
+                .collect(Collectors.toList());
+
+        List<SensorDataEntity> sensorDataEntities = sensorDataRepository.findAllByHouseSensorIds(houseSensorIds);
+
+        HashMap<String, List<SensorData>> response = new HashMap<>();
+
+        // List led
+        List<SensorDataEntity> dataLeds = sensorDataEntities.stream()
+                .filter(data -> Objects.equals(data.getSensorType(), SensorType.LED))
+                .limit(10)
+                .collect(Collectors.toList());
+
+        response.put(SensorType.LED.name(), sensorDataMapper.toDto(dataLeds));
+        return response;
+    }
 }

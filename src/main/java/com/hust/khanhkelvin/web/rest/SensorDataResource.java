@@ -31,10 +31,15 @@ public class SensorDataResource {
         return ResponseEntity.ok(sensorService.getSensors());
     }
 
-    @PostMapping("/sensor-data-house/{houseId}")
+    @PostMapping("/sensor-data-house/sensor/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensors(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfSensors(houseId);
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/sensor-data-house/led/{houseId}")
+    public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfLeds(@PathVariable Long houseId) {
+        HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfLeds(houseId);
+        return ResponseEntity.ok(response);
+    }
 }
