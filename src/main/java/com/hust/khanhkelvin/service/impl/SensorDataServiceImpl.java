@@ -2,17 +2,18 @@ package com.hust.khanhkelvin.service.impl;
 
 import com.hust.khanhkelvin.domain.HouseSensorEntity;
 import com.hust.khanhkelvin.domain.SensorDataEntity;
+import com.hust.khanhkelvin.domain.SensorEntity;
 import com.hust.khanhkelvin.dto.response.UserInfo;
 import com.hust.khanhkelvin.dto.response.sensor.SensorData;
 import com.hust.khanhkelvin.repository.HouseSensorRepository;
 import com.hust.khanhkelvin.repository.SensorDataRepository;
+import com.hust.khanhkelvin.repository.SensorRepository;
 import com.hust.khanhkelvin.service.SensorDataService;
 import com.hust.khanhkelvin.service.UserService;
 import com.hust.khanhkelvin.service.mapper.SensorDataMapper;
 import com.hust.khanhkelvin.utils.SensorType;
 import com.hust.khanhkelvin.web.error.BadRequestAlertException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +31,14 @@ public class SensorDataServiceImpl implements SensorDataService {
 
     private final HouseSensorRepository houseSensorRepository;
 
-    public SensorDataServiceImpl(SensorDataMapper sensorDataMapper, UserService userService, SensorDataRepository sensorDataRepository, HouseSensorRepository houseSensorRepository) {
+    private final SensorRepository sensorRepository;
+
+    public SensorDataServiceImpl(SensorDataMapper sensorDataMapper, UserService userService, SensorDataRepository sensorDataRepository, HouseSensorRepository houseSensorRepository, SensorRepository sensorRepository) {
         this.sensorDataMapper = sensorDataMapper;
         this.userService = userService;
         this.sensorDataRepository = sensorDataRepository;
         this.houseSensorRepository = houseSensorRepository;
+        this.sensorRepository = sensorRepository;
     }
 
     @Override
