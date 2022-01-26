@@ -38,8 +38,8 @@ public class RabbitConfig {
     @Bean(name = "queueAction")
     Queue queueAction() {
         Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-routing-key", "notification_dead_letter_key");
-        args.put("x-max-length", 1000000L);
+//        args.put("x-dead-letter-routing-key", "notification_dead_letter_key");
+//        args.put("x-max-length", 1000000L);
 
         return new Queue(configurationProperties.getQueueHustIotAction(), true, false, false, args);
     }
@@ -47,8 +47,8 @@ public class RabbitConfig {
     @Bean(name = "queueStream")
     Queue queueStream() {
         Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-routing-key", "notification_dead_letter_key");
-        args.put("x-max-length", 1000000L);
+//        args.put("x-dead-letter-routing-key", "notification_dead_letter_key");
+//        args.put("x-max-length", 1000000L);
 
         return new Queue(configurationProperties.getQueueHustIotStream(), true, false, false, args);
     }

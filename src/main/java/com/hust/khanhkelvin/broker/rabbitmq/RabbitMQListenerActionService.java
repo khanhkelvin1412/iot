@@ -21,13 +21,14 @@ public class RabbitMQListenerActionService implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
+        System.out.println("Message Body: " + message.getBody());
         // receive and map data to user
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonObject = new String(message.getBody());
         try {
             SensorData sensorData = objectMapper.readValue(jsonObject, SensorData.class);
-            sensorDataService.saveSensorData(sensorData);
             System.out.println(sensorData);
+            sensorDataService.saveSensorData(sensorData);
         } catch (JsonProcessingException e) {
             log.error("Convert Data from RabbitMQ Fail!");
         }
