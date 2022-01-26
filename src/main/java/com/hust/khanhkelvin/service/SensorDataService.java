@@ -22,4 +22,5 @@ public interface SensorDataService {
      */
     HashMap<String, List<SensorData>> getAllValueOfSensors(Long houseId);
 
+    HashMap<String, List<SensorData>> getAllValueOfLeds(Long houseId);
 }
