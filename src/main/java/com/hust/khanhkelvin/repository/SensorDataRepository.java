@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface SensorDataRepository extends JpaRepository<SensorDataEntity, Long> {
 
-    @Query("from SensorDataEntity sde where sde.houseSensorId in (:houseSensorIds)")
+    @Query("from SensorDataEntity sde where sde.houseSensorId in (:houseSensorIds) and sde.id in (" +
+            "select max(id) from SensorDataEntity group by houseSensorId)")
     List<SensorDataEntity> findAllByHouseSensorIds(List<Long> houseSensorIds);
 }

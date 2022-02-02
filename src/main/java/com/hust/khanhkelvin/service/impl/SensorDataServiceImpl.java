@@ -66,19 +66,16 @@ public class SensorDataServiceImpl implements SensorDataService {
         // List HUMIDITY
         List<SensorDataEntity> dataHumidities = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.HUMIDITY))
-                .limit(10)
                 .collect(Collectors.toList());
 
         // List THERMOMETER
         List<SensorDataEntity> dataThermoeter = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.THERMOMETER))
-                .limit(10)
                 .collect(Collectors.toList());
 
         // List GAS CONCENTRATION
         List<SensorDataEntity> dataGasConcentration = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.GAS_CONCENTRATION))
-                .limit(10)
                 .collect(Collectors.toList());
 
         // List door
@@ -105,7 +102,6 @@ public class SensorDataServiceImpl implements SensorDataService {
         // List led
         List<SensorDataEntity> dataLeds = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.LED))
-                .limit(10)
                 .collect(Collectors.toList());
 
         response.put(SensorType.LED.name(), sensorDataMapper.toDto(dataLeds));
