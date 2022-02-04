@@ -23,4 +23,12 @@ public interface SensorDataService {
     HashMap<String, List<SensorData>> getAllValueOfSensors(Long houseId);
 
     HashMap<String, List<SensorData>> getAllValueOfLeds(Long houseId);
+
+    /**
+     * lay tat ca thong so cua thiet bi trong nha tai thoi diem moi nhat
+     *
+     * @param houseId
+     * @return
+     */
+    HashMap<String, List<SensorData>> getValueEachSensorData(Long houseId);
 }

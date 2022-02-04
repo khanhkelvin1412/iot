@@ -2,7 +2,6 @@ package com.hust.khanhkelvin.service.impl;
 
 import com.hust.khanhkelvin.domain.HouseSensorEntity;
 import com.hust.khanhkelvin.domain.SensorDataEntity;
-import com.hust.khanhkelvin.domain.SensorEntity;
 import com.hust.khanhkelvin.dto.response.UserInfo;
 import com.hust.khanhkelvin.dto.response.sensor.SensorData;
 import com.hust.khanhkelvin.repository.HouseSensorRepository;
@@ -15,9 +14,9 @@ import com.hust.khanhkelvin.utils.SensorType;
 import com.hust.khanhkelvin.web.error.BadRequestAlertException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,7 +57,6 @@ public class SensorDataServiceImpl implements SensorDataService {
 
     @Override
     public HashMap<String, List<SensorData>> getAllValueOfSensors(Long houseId) {
-        UserInfo user = userService.getCurrentUser();
         List<Long> houseSensorIds = houseSensorRepository.findByHouseId(houseId)
                 .stream().map(HouseSensorEntity::getId)
                 .collect(Collectors.toList());
@@ -74,7 +72,7 @@ public class SensorDataServiceImpl implements SensorDataService {
                 .collect(Collectors.toList());
 
         // List THERMOMETER
-        List<SensorDataEntity> dataThermoeter = sensorDataEntities.stream()
+        List<SensorDataEntity> dataThermometer = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.THERMOMETER))
                 .limit(10)
                 .collect(Collectors.toList());
@@ -86,18 +84,35 @@ public class SensorDataServiceImpl implements SensorDataService {
                 .collect(Collectors.toList());
 
         // List door
+        List<SensorDataEntity> doors = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.DOOR))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
 
         // List led
+        List<SensorDataEntity> leds = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.LED))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
 
         response.put(SensorType.HUMIDITY.name(), sensorDataMapper.toDto(dataHumidities));
-        response.put(SensorType.THERMOMETER.name(), sensorDataMapper.toDto(dataThermoeter));
+        response.put(SensorType.THERMOMETER.name(), sensorDataMapper.toDto(dataThermometer));
         response.put(SensorType.GAS_CONCENTRATION.name(), sensorDataMapper.toDto(dataGasConcentration));
+        response.put(SensorType.DOOR.name(), sensorDataMapper.toDto(doors));
+        response.put(SensorType.LED.name(), sensorDataMapper.toDto(leds));
         return response;
     }
 
     @Override
     public HashMap<String, List<SensorData>> getAllValueOfLeds(Long houseId) {
-        UserInfo user = userService.getCurrentUser();
         List<Long> houseSensorIds = houseSensorRepository.findByHouseId(houseId)
                 .stream().map(HouseSensorEntity::getId)
                 .collect(Collectors.toList());
@@ -113,6 +128,69 @@ public class SensorDataServiceImpl implements SensorDataService {
                 .collect(Collectors.toList());
 
         response.put(SensorType.LED.name(), sensorDataMapper.toDto(dataLeds));
+        return response;
+    }
+
+    @Override
+    public HashMap<String, List<SensorData>> getValueEachSensorData(Long houseId) {
+        List<Long> houseSensorIds = houseSensorRepository.findByHouseId(houseId)
+                .stream().map(HouseSensorEntity::getId)
+                .collect(Collectors.toList());
+
+        HashMap<String, List<SensorData>> response = new HashMap<>();
+
+        List<SensorDataEntity> sensorDataEntities = sensorDataRepository.findAllByHouseSensorIds(houseSensorIds);
+
+        List<SensorDataEntity> dataHumidities = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.HUMIDITY))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
+
+        List<SensorDataEntity> dataThermometer = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.THERMOMETER))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
+
+        List<SensorDataEntity> dataGasConcentration = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.GAS_CONCENTRATION))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
+
+        List<SensorDataEntity> doors = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.DOOR))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
+
+        List<SensorDataEntity> leds = new ArrayList<>(
+                sensorDataEntities.stream()
+                        .filter(data -> Objects.equals(data.getSensorType(), SensorType.LED))
+                        .collect(Collectors.toMap(
+                                SensorDataEntity::getHouseSensorId,
+                                Function.identity(),
+                                BinaryOperator.maxBy(Comparator.comparing(SensorDataEntity::getCreatedDate))))
+                        .values());
+
+        response.put(SensorType.HUMIDITY.name(), sensorDataMapper.toDto(dataHumidities));
+        response.put(SensorType.THERMOMETER.name(), sensorDataMapper.toDto(dataThermometer));
+        response.put(SensorType.GAS_CONCENTRATION.name(), sensorDataMapper.toDto(dataGasConcentration));
+        response.put(SensorType.DOOR.name(), sensorDataMapper.toDto(doors));
+        response.put(SensorType.LED.name(), sensorDataMapper.toDto(leds));
         return response;
     }
 }
