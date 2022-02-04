@@ -42,4 +42,10 @@ public class SensorDataResource {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfLeds(houseId);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/sensor-data-house/mobile/{houseId}")
+    public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensorsForMobile(@PathVariable Long houseId) {
+        HashMap<String, List<SensorData>> response = sensorDataService.getValueEachSensorData(houseId);
+        return ResponseEntity.ok(response);
+    }
 }
