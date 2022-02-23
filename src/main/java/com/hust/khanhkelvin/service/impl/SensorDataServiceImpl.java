@@ -68,19 +68,25 @@ public class SensorDataServiceImpl implements SensorDataService {
         // List HUMIDITY
         List<SensorDataEntity> dataHumidities = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.HUMIDITY))
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate).reversed())
                 .limit(10)
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate))
                 .collect(Collectors.toList());
 
         // List THERMOMETER
         List<SensorDataEntity> dataThermometer = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.THERMOMETER))
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate).reversed())
                 .limit(10)
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate))
                 .collect(Collectors.toList());
 
         // List GAS CONCENTRATION
         List<SensorDataEntity> dataGasConcentration = sensorDataEntities.stream()
                 .filter(data -> Objects.equals(data.getSensorType(), SensorType.GAS_CONCENTRATION))
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate).reversed())
                 .limit(10)
+                .sorted(Comparator.comparing(SensorDataEntity::getCreatedDate))
                 .collect(Collectors.toList());
 
         // List door

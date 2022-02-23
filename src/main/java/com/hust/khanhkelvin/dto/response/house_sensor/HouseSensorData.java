@@ -19,4 +19,6 @@ public class HouseSensorData {
         this.sensorId = sensorId;
         this.sensorType = sensorType;
     }
+
+
 }

@@ -9,6 +9,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SensorData extends AbstractAuditing {
 
+    private Long id;
+
     private Long houseSensorId;
 
     private SensorType sensorType;
