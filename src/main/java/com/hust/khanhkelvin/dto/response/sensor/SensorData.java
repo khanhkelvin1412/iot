@@ -1,12 +1,13 @@
 package com.hust.khanhkelvin.dto.response.sensor;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hust.khanhkelvin.dto.response.AbstractAuditing;
 import com.hust.khanhkelvin.utils.SensorType;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SensorData {
+public class SensorData extends AbstractAuditing {
 
     private Long houseSensorId;
 

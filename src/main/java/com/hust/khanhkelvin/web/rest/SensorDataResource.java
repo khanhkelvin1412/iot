@@ -7,7 +7,6 @@ import com.hust.khanhkelvin.service.SensorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.management.Sensor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,19 +30,19 @@ public class SensorDataResource {
         return ResponseEntity.ok(sensorService.getSensors());
     }
 
-    @PostMapping("/sensor-data-house/sensor/{houseId}")
+    @GetMapping("/sensor-data-house/sensor/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensors(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfSensors(houseId);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/sensor-data-house/led/{houseId}")
+    @GetMapping("/sensor-data-house/led/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfLeds(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfLeds(houseId);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/sensor-data-house/mobile/{houseId}")
+    @GetMapping("/sensor-data-house/mobile/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensorsForMobile(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getValueEachSensorData(houseId);
         return ResponseEntity.ok(response);
