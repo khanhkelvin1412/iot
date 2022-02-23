@@ -30,19 +30,19 @@ public class SensorDataResource {
         return ResponseEntity.ok(sensorService.getSensors());
     }
 
-    @GetMapping("/sensor-data-house/sensor/{houseId}")
+    @PostMapping("/sensor-data-house/sensor/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensors(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfSensors(houseId);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/sensor-data-house/led/{houseId}")
+    @PostMapping("/sensor-data-house/led/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfLeds(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getAllValueOfLeds(houseId);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/sensor-data-house/mobile/{houseId}")
+    @PostMapping("/sensor-data-house/mobile/{houseId}")
     public ResponseEntity<HashMap<String, List<SensorData>>> getAllValueOfSensorsForMobile(@PathVariable Long houseId) {
         HashMap<String, List<SensorData>> response = sensorDataService.getValueEachSensorData(houseId);
         return ResponseEntity.ok(response);
