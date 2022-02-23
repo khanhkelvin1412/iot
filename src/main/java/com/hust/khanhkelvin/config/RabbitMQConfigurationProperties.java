@@ -11,4 +11,10 @@ public class RabbitMQConfigurationProperties {
     private String queueHustIotAction;
 
     private String queueHustIotStream;
+
+    private String queueHustIotHouseSensor;
+
+    private String houseSensorRoutingKey;
+
+    private String houseSensorExchange;
 }

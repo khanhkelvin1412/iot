@@ -78,3 +78,6 @@ application:
 rabbitmq:
   queue-hust-iot-action: queue.hust.iot.action
   queue-hust-iot-stream: queue.hust.iot.stream
+  queue-hust-iot-house-sensor: queue.hust.iot.house-sensor
+  house-sensor-routing-key: queue.hust.iot.house-sensor-key
+  house-sensor-exchange: house-sensor

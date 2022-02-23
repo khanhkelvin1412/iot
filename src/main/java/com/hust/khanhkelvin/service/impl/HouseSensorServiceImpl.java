@@ -1,34 +1,50 @@
 package com.hust.khanhkelvin.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hust.khanhkelvin.config.RabbitMQConfigurationProperties;
 import com.hust.khanhkelvin.domain.HouseEntity;
 import com.hust.khanhkelvin.domain.HouseSensorEntity;
 import com.hust.khanhkelvin.domain.SensorEntity;
 import com.hust.khanhkelvin.dto.request.SensorInfoRequest;
-import com.hust.khanhkelvin.repository.HouseRepository;
+import com.hust.khanhkelvin.dto.response.house_sensor.HouseSensorData;
 import com.hust.khanhkelvin.repository.HouseSensorRepository;
 import com.hust.khanhkelvin.repository.SensorRepository;
-import com.hust.khanhkelvin.repository.UserRepository;
 import com.hust.khanhkelvin.service.HouseSensorService;
-import com.hust.khanhkelvin.service.mapper.HouseInfoMapper;
 import com.hust.khanhkelvin.web.error.BadRequestAlertException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class HouseSensorServiceImpl implements HouseSensorService {
+
+    private final RabbitMQConfigurationProperties properties;
+
+    private final ObjectMapper objectMapper;
+
+    private static final String routingKey = "queue.hust.iot.house-sensor-key";
+
+    private static final String exchange = "house-sensor";
+
+    private final RabbitTemplate rabbitTemplate;
 
     private final HouseSensorRepository houseSensorRepository;
 
     private final SensorRepository sensorRepository;
 
     public HouseSensorServiceImpl(
-            HouseSensorRepository houseSensorRepository,
+            RabbitMQConfigurationProperties properties, ObjectMapper objectMapper, RabbitTemplate rabbitTemplate, HouseSensorRepository houseSensorRepository,
             SensorRepository sensorRepository
-        ) {
+    ) {
+        this.properties = properties;
+        this.objectMapper = objectMapper;
+        this.rabbitTemplate = rabbitTemplate;
 
         this.houseSensorRepository = houseSensorRepository;
         this.sensorRepository = sensorRepository;
@@ -84,7 +100,27 @@ public class HouseSensorServiceImpl implements HouseSensorService {
             success += sensorInfoRequest.getQuantity();
         }
 
-        houseSensorRepository.saveAll(sensors);
+        // list sensor to map type
+        List<SensorEntity> sensorEntities = sensorRepository.findAll();
+        List<HouseSensorEntity> houseSensorSavedList = houseSensorRepository.saveAll(sensors);
+        houseSensorSavedList.forEach(item -> {
+            Optional<SensorEntity> optionalSensorEntity = sensorEntities.stream()
+                    .filter(sensorE -> Objects.equals(sensorE.getId(), item.getSensorId()))
+                    .findFirst();
+            if (optionalSensorEntity.isPresent()) {
+                HouseSensorData houseSensorData = new HouseSensorData(house.getId(), house.getName(), item.getId(), optionalSensorEntity.get().getType());
+
+                // send infor to rabbitmq
+                try {
+                    rabbitTemplate.convertAndSend(
+                            properties.getHouseSensorExchange(),
+                            properties.getHouseSensorRoutingKey(),
+                            objectMapper.writeValueAsString(houseSensorData));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         return success;
     }
 }
